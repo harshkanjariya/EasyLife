@@ -9,46 +9,40 @@
 	tools:context=".HisabActivity">
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:padding="10dp">
 		<TextView
-			android:layout_width="0dp"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Total"
-			android:padding="10dp"
 			android:layout_weight="1"
-			android:textStyle="bold"/>
+			android:text="total"/>
 		<TextView
-			android:layout_width="0dp"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Credit"
-			android:padding="10dp"
-			android:layout_weight="1"/>
+			android:layout_weight="1"
+			android:text="Credit"/>
 		<TextView
-			android:layout_width="0dp"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:id="@+id/total_credit"
-			android:padding="10dp"
+			android:layout_weight="1"
 			android:textColor="#00a000"
+			android:text="0"
+			android:id="@+id/total_credit"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:textStyle="bold"/>
+			android:text="Debit"/>
 		<TextView
-			android:layout_width="0dp"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Debit"
-			android:padding="10dp"
-			android:layout_weight="1"/>
-		<TextView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:id="@+id/total_debit"
+			android:layout_weight="1"
 			android:textColor="#f00000"
-			android:padding="10dp"
-			android:layout_weight="1"
-			android:textStyle="bold"/>
+			android:text="0"
+			android:id="@+id/total_debit"/>
 	</LinearLayout>
-	<androidx.recyclerview.widget.RecyclerView
+	<com.harsh.hkutils.list.HKList
 		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1"
-		android:id="@+id/recycler_view"/>
+		android:layout_height="match_parent"
+		android:id="@+id/hisab_list"/>
 </LinearLayout>
