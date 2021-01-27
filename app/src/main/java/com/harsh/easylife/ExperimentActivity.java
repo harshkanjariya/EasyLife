@@ -60,8 +60,20 @@ public class ExperimentActivity extends AppCompatActivity {
 		EventCalendarView calendarView=findViewById(R.id.calendar);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String current = dateFormat.format(System.currentTimeMillis());
+		calendarView.setCallback(new EventCalendarView.Callback() {
+			@Override
+			public void onMonthSelect(int month) {
+				calendarView.ShowYearSelector();
+			}
 
-		findViewById(R.id.root_calender_layout).setOnClickListener(view ->calendarView.DateSelectorVisiblity());
+			@Override
+			public void onYearSelect(int year) {
+				calendarView.ShowDateSelector();
+
+			}
+		});
+
+		findViewById(R.id.root_calender_layout).setOnClickListener(view ->calendarView.ShowDateSelector());
 
 		ColorStateList colorStateList=new ColorStateList(new int[][]{
 				new int[]{android.R.attr.state_selected},
