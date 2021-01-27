@@ -93,9 +93,7 @@ public class EventCalendarView extends LinearLayout{
 
 
 		findViewById(R.id.month_year_title).setOnClickListener(view -> {
-			nextButton.setVisibility(GONE);
-			previousButton.setVisibility(GONE);
-			MonthYearSelector();
+			MonthSelectorVisiblity();
 		});
 
 		nextButton.setOnClickListener(v -> viewPager.setCurrentItem(2));
@@ -139,7 +137,6 @@ public class EventCalendarView extends LinearLayout{
 		monthList.layoutManager(new GridLayoutManager(getContext(),4)).init(R.layout.month_layout, Months, new HKListHelper<String>() {
 			@Override
 			public void bind(HKViewHolder holder, String object, int position) {
-
 				TextView tv = holder.textView(R.id.txt);
 				tv.setText(""+object);
 				if(shared.selected.get(Calendar.MONTH)==position) {
@@ -155,10 +152,7 @@ public class EventCalendarView extends LinearLayout{
 				}
 
 				holder.click(R.id.month_layout_particular, view -> {
-					if (shared.callback!=null)
-						shared.callback.onMonthSelect(position);
-					else
-						ShowDateSelector();
+					DateSelectorVisiblity();
 					shared.selected.set(Calendar.MONTH,position);
 					adapter.update();
 				});
@@ -167,36 +161,53 @@ public class EventCalendarView extends LinearLayout{
 
 	}
 
-	public void MonthYearSelector() {
+	public void MonthSelectorVisiblity() {
 		if(!isMonthView)
-			ShowMonthSelector();
+		{
+			MonthSelector();
+			isMonthView = true;
+			viewPager.setVisibility(GONE);
+			findViewById(R.id.year_list).setVisibility(GONE);
+			monthList.setVisibility(VISIBLE);
+		}
 		else if(!isYearView)
-			ShowYearSelector();
+		{
+			isMonthView = false;
+			YearSelector();
+			isYearView = true;
+			viewPager.setVisibility(GONE);
+			findViewById(R.id.year_list).setVisibility(VISIBLE);
+			monthList.setVisibility(GONE);
+		}
 		else
-			ShowDateSelector();
+		{
+			isYearView = false;
+			isMonthView = false;
+			viewPager.setVisibility(VISIBLE);
+			findViewById(R.id.year_list).setVisibility(GONE);
+			monthList.setVisibility(GONE);
+		}
 	}
-	public void ShowMonthSelector() {
-		MonthSelector();
-		isMonthView = true;
-		viewPager.setVisibility(GONE);
-		findViewById(R.id.year_list).setVisibility(GONE);
-		monthList.setVisibility(VISIBLE);
+	public void YearSelectorVisiblity() {
+		if(isMonthView)
+		{
+			viewPager.setVisibility(GONE);
+			findViewById(R.id.year_list).setVisibility(GONE);
+			monthList.setVisibility(VISIBLE);
+		}
+		else
+		{
+			viewPager.setVisibility(VISIBLE);
+			findViewById(R.id.year_list).setVisibility(GONE);
+			monthList.setVisibility(GONE);
+		}
+		isMonthView=!isMonthView;
 	}
-	public void ShowYearSelector() {
-		isMonthView = false;
-		YearSelector();
-		isYearView = true;
-		viewPager.setVisibility(GONE);
-		findViewById(R.id.year_list).setVisibility(VISIBLE);
-		monthList.setVisibility(GONE);
-	}
-	public void ShowDateSelector() {
+	public void DateSelectorVisiblity() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
 		monthTitle.setText(dateFormat.format(adapter.calendar[1].getTime()));
 			isMonthView = false;
 			isYearView = false;
-			findViewById(R.id.next_month_button).setVisibility(VISIBLE);
-			findViewById(R.id.previous_month_button).setVisibility(VISIBLE);
 			viewPager.setVisibility(VISIBLE);
 			findViewById(R.id.year_list).setVisibility(GONE);
 			monthList.setVisibility(GONE);
@@ -230,14 +241,10 @@ public class EventCalendarView extends LinearLayout{
 							tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 						}
 						holder.click(R.id.year_layout, view -> {
-
 							shared.selected.set(Calendar.YEAR,object);
 							adapter.update();
 						listView.update();
-						if(shared.callback!=null)
-							shared.callback.onYearSelect(object);
-						else
-							MonthYearSelector();
+						MonthSelectorVisiblity();
 						});
 					}
 				});
