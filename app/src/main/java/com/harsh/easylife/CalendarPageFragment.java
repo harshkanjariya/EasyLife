@@ -8,14 +8,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CalendarPageFragment extends Fragment {
 
@@ -24,15 +27,17 @@ public class CalendarPageFragment extends Fragment {
 	DayAdapter adapter;
 	EventCalendarView.DayInflater dayInflater;
 	int day_layout;
+	Shared shared;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-
-	public CalendarPageFragment(long millis, EventCalendarView.DayInflater inflater,int day_layout,Calendar selected) {
+	public CalendarPageFragment(long millis,Shared shared) {
 		this.calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(millis);
-		this.dayInflater = inflater;
-		this.day_layout = day_layout;
-		this.selected=selected;
+		this.dayInflater = shared.inflater;
+		this.day_layout = shared.day_layout;
+		this.selected=shared.selected;
+		this.shared = shared;
 	}
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,19 @@ public class CalendarPageFragment extends Fragment {
 		adapter=new DayAdapter(Objects.requireNonNull(getContext()));
 		gridView.setAdapter(adapter);
 
+		gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				gridView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				int originalHeight=gridView.getMeasuredHeight();
+				if(shared.height<originalHeight) {
+					ViewGroup.LayoutParams layoutParams = container.getLayoutParams();
+					layoutParams.height = originalHeight;
+					shared.height = originalHeight;
+					container.setLayoutParams(layoutParams);
+				}
+			}
+		});
 		return view;
 	}
 	class DayAdapter extends BaseAdapter {

@@ -53,7 +53,6 @@ public class ExperimentActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_experiment);
-
 		mOriginalValues.add("abc");
 		mOriginalValues.add("xyz");
 		mOriginalValues.add("xbz");
@@ -61,6 +60,8 @@ public class ExperimentActivity extends AppCompatActivity {
 		EventCalendarView calendarView=findViewById(R.id.calendar);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String current = dateFormat.format(System.currentTimeMillis());
+
+		findViewById(R.id.root_calender_layout).setOnClickListener(view ->calendarView.DateSelectorVisiblity());
 
 		ColorStateList colorStateList=new ColorStateList(new int[][]{
 				new int[]{android.R.attr.state_selected},
