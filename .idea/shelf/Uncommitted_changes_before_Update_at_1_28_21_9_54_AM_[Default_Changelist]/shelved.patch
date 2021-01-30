@@ -1,0 +1,48 @@
+Index: app/src/main/java/com/harsh/easylife/EventCalendarView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.harsh.easylife;\n\nimport android.content.Context;\nimport android.content.res.TypedArray;\nimport android.util.AttributeSet;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.ImageButton;\nimport android.widget.LinearLayout;\nimport android.widget.TextView;\n\nimport androidx.annotation.Nullable;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.viewpager.widget.ViewPager;\n\nimport java.text.SimpleDateFormat;\nimport java.util.Calendar;\nimport java.util.Locale;\n\npublic class EventCalendarView extends LinearLayout{\n\n\tprivate static final String TAG = \"EventCalendarView\";\n\tprivate ViewPager viewPager;\n\tCalendarPagerAdapter adapter;\n\tprivate TextView monthTitle;\n\n\tpublic static int DAY=0;\n\tpublic static int BLANK=-1;\n\tpublic static int WEEK=1;\n\n\tprivate int day_resource;\n\n\tpublic EventCalendarView(Context context) {\n\t\tsuper(context);\n\t\tday_resource = R.layout.item_calendar_day;\n\t\tcommonInit(context);\n\t}\n\tprivate void commonInit(Context context){\n\t\tinflate(context,R.layout.layout_event_calendar_view,this);\n\n\t\tAppCompatActivity activity= (AppCompatActivity) context;\n\t\tadapter = new CalendarPagerAdapter(activity.getSupportFragmentManager(),day_resource);\n\n\t\tmonthTitle = findViewById(R.id.month_title);\n\t\tSimpleDateFormat dateFormat = new SimpleDateFormat(\"MMMM yyyy\", Locale.US);\n\t\tmonthTitle.setText(dateFormat.format(adapter.calendar[1].getTime()));\n\n\t\tImageButton nextButton = findViewById(R.id.next_month_button);\n\t\tImageButton previousButton = findViewById(R.id.previous_month_button);\n\n\t\tviewPager=findViewById(R.id.calendar_pager);\n\t\tviewPager.setAdapter(adapter);\n\t\tviewPager.setCurrentItem(1);\n\n\t\tnextButton.setOnClickListener(v -> viewPager.setCurrentItem(2));\n\t\tpreviousButton.setOnClickListener(v -> viewPager.setCurrentItem(0));\n\n\t\tViewPager.OnPageChangeListener pageChangeListener=new ViewPager.OnPageChangeListener() {\n\t\t\t@Override\n\t\t\tpublic void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {\n\t\t\t\tif ( ((viewPager.getCurrentItem()==2 && 2==position) ||\n\t\t\t\t\t\t(viewPager.getCurrentItem()==0 && 0==position)) &&\n\t\t\t\t\t\tpositionOffset==0) {\n\t\t\t\t\tLog.e(TAG+\" \"+position, \"onPageScrolled: current=\"+viewPager.getCurrentItem()+\" \"+positionOffset);\n\t\t\t\t\tif (viewPager.getCurrentItem()==2){\n\t\t\t\t\t\tadapter.nextMonth();\n\t\t\t\t\t}else{\n\t\t\t\t\t\tadapter.previousMonth();\n\t\t\t\t\t}\n\t\t\t\t\tviewPager.setCurrentItem(1,false);\n\t\t\t\t\tadapter.notifyDataSetChanged();\n\t\t\t\t}else if (position == 1 && positionOffset == 0){\n\t\t\t\t\tmonthTitle.setText(dateFormat.format(adapter.calendar[1].getTime()));\n\t\t\t\t}else if (position == 1 && positionOffset > 0.5){\n\t\t\t\t\tmonthTitle.setText(dateFormat.format(adapter.calendar[2].getTime()));\n\t\t\t\t}else if (position == 0 && positionOffset < 0.5){\n\t\t\t\t\tmonthTitle.setText(dateFormat.format(adapter.calendar[0].getTime()));\n\t\t\t\t}else if (position!=2){\n\t\t\t\t\tmonthTitle.setText(dateFormat.format(adapter.calendar[1].getTime()));\n\t\t\t\t}\n\t\t\t}\n\t\t\t@Override\n\t\t\tpublic void onPageSelected(int position) { }\n\t\t\t@Override\n\t\t\tpublic void onPageScrollStateChanged(int state) { }\n\t\t};\n\t\tviewPager.addOnPageChangeListener(pageChangeListener);\n\t}\n\tpublic EventCalendarView(Context context, @Nullable AttributeSet attrs) {\n\t\tsuper(context, attrs);\n\t\tTypedArray typedArray=context.obtainStyledAttributes(attrs, R.styleable.EventCalendarView);\n\n\t\tday_resource=typedArray.getResourceId(R.styleable.EventCalendarView_dayLayout, R.layout.item_calendar_day);\n\n\t\ttypedArray.recycle();\n\t\tcommonInit(context);\n\t}\n\tpublic void setDayResource(int day_resource){\n\t\tthis.day_resource=day_resource;\n\t\tadapter.notifyDataSetChanged();\n\t}\n\tpublic void setInflater(DayInflater inflater){\n\t\tadapter.setInflater(inflater);\n\t}\n\tpublic interface DayInflater{\n\t\tvoid inflate(Calendar calendar, View layout,int type);\n\t}\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/harsh/easylife/EventCalendarView.java	(revision 4df4c040fb922f0e0740b983743a9c4975f13b65)
++++ app/src/main/java/com/harsh/easylife/EventCalendarView.java	(date 1611399279000)
+@@ -58,18 +58,7 @@
+ 		ViewPager.OnPageChangeListener pageChangeListener=new ViewPager.OnPageChangeListener() {
+ 			@Override
+ 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+-				if ( ((viewPager.getCurrentItem()==2 && 2==position) ||
+-						(viewPager.getCurrentItem()==0 && 0==position)) &&
+-						positionOffset==0) {
+-					Log.e(TAG+" "+position, "onPageScrolled: current="+viewPager.getCurrentItem()+" "+positionOffset);
+-					if (viewPager.getCurrentItem()==2){
+-						adapter.nextMonth();
+-					}else{
+-						adapter.previousMonth();
+-					}
+-					viewPager.setCurrentItem(1,false);
+-					adapter.notifyDataSetChanged();
+-				}else if (position == 1 && positionOffset == 0){
++				if (position == 1 && positionOffset == 0){
+ 					monthTitle.setText(dateFormat.format(adapter.calendar[1].getTime()));
+ 				}else if (position == 1 && positionOffset > 0.5){
+ 					monthTitle.setText(dateFormat.format(adapter.calendar[2].getTime()));
+@@ -82,7 +71,17 @@
+ 			@Override
+ 			public void onPageSelected(int position) { }
+ 			@Override
+-			public void onPageScrollStateChanged(int state) { }
++			public void onPageScrollStateChanged(int state) {
++				if (state==ViewPager.SCROLL_STATE_IDLE && viewPager.getCurrentItem()!=1) {
++					if (viewPager.getCurrentItem() == 2) {
++						adapter.nextMonth();
++					} else {
++						adapter.previousMonth();
++					}
++					viewPager.setCurrentItem(1, false);
++					adapter.notifyDataSetChanged();
++				}
++			}
+ 		};
+ 		viewPager.addOnPageChangeListener(pageChangeListener);
+ 	}

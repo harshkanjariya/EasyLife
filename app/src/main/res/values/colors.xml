@@ -7,4 +7,10 @@
 	<color name="teal_700">#FF018786</color>
 	<color name="black">#FF000000</color>
 	<color name="white">#FFFFFFFF</color>
+	<color name="success">#00a000</color>
+	<color name="error">#f00000</color>
+	<color name="short_day">#d0d000</color>
+	<color name="half_day">#900000</color>
+	<color name="dynamic1_day">#707070</color>
+	<color name="dynamic2_day">#000000</color>
 </resources>

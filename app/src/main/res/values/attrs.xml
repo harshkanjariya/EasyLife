@@ -3,4 +3,13 @@
 	<declare-styleable name="EventCalendarView">
 		<attr name="dayLayout" format="reference"/>
 	</declare-styleable>
+
+	<declare-styleable name="AttendanceState">
+		<attr name="state_present" format="boolean"/>
+		<attr name="state_absent" format="boolean"/>
+		<attr name="state_short_day" format="boolean"/>
+		<attr name="state_half_day" format="boolean"/>
+		<attr name="state_dynamic1_day" format="boolean"/>
+		<attr name="state_dynamic2_day" format="boolean"/>
+	</declare-styleable>
 </resources>

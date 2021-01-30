@@ -8,10 +8,10 @@
 	android:id="@+id/root_calender_layout"
 	tools:context=".ExperimentActivity">
 
-	<com.harsh.easylife.EventCalendarView
+	<com.harsh.hkutils.calendar.EventCalendarView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		app:dayLayout="@layout/item_calendar_day"
+		app:dayLayout="@layout/item_calendar_view"
 		android:id="@+id/calendar"/>
 	<Button
 		android:layout_width="wrap_content"
