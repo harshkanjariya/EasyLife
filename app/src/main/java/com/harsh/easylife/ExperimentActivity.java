@@ -1,15 +1,26 @@
 package com.harsh.easylife;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.harsh.hkutils.calendar.EventCalendarView;
+import com.harsh.hkutils.list.HKList;
+import com.harsh.hkutils.list.HKListHelper;
+import com.harsh.hkutils.list.HKViewHolder;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +35,23 @@ public class ExperimentActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_experiment);
+
+//		RecyclerView recyclerView = findViewById(R.id.temp);
+//		LinearLayoutManager manager = new LinearLayoutManager(this);
+//		manager.setOrientation(RecyclerView.HORIZONTAL);
+//		recyclerView.setLayoutManager(manager);
+//		recyclerView.setAdapter(new TempAdapter());
+
+		ArrayList<String>list = new ArrayList<>();
+		list.add("hii");
+		list.add("hii");
+		list.add("hii");
+		list.add("hii");
+
+		HKList ls = findViewById(R.id.temp);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+		ls.layoutManager(layoutManager).init(R.layout.item_hisab_sublist,list, (holder, object, position) -> { });
 
 		EventCalendarView calendarView=findViewById(R.id.calendar);
 //		calendarView.setCallback(new EventCalendarView.Callback() {
@@ -81,7 +109,7 @@ public class ExperimentActivity extends AppCompatActivity {
 		ArrayList<String>absentDates = new ArrayList<>();
 		absentDates.add("14/01/2021");
 
-		calendarView.setInflater((calendar, layout, type) -> {
+		calendarView.setInflater((calendar, layout,selected, type) -> {
 			ImageView v=layout.findViewById(R.id.dot);
 			if (type==EventCalendarView.DAY) {
 				v.setBackgroundTintList(colorStateList);
@@ -105,6 +133,40 @@ public class ExperimentActivity extends AppCompatActivity {
 				v.setVisibility(View.GONE);
 			}
 		});
+		CirclularProgressButton button = findViewById(R.id.btn);
+		button.setCallback(new CirclularProgressButton.Callback() {
+			@Override
+			public void onComplete() {
+				Log.e("113", "ExperimentActivity > onComplete: ");
+			}
+			@Override
+			public void onCancel() {
+				Log.e("118", "ExperimentActivity > onCancel: ");
+			}
+		});
 	}
 	public void toggle(View view) { }
+
+	class TempAdapter extends RecyclerView.Adapter<TempAdapter.TempViewHolder> {
+
+
+		@NonNull
+		@Override
+		public TempViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+			View view = getLayoutInflater().inflate(R.layout.item_hisab_sublist,parent,false);
+			return new TempViewHolder(view);
+		}
+		@Override
+		public void onBindViewHolder(@NonNull TempViewHolder holder, int position) {}
+
+		@Override
+		public int getItemCount() {
+			return 5;
+		}
+		class TempViewHolder extends RecyclerView.ViewHolder{
+			public TempViewHolder(@NonNull View itemView) {
+				super(itemView);
+			}
+		}
+	}
 }

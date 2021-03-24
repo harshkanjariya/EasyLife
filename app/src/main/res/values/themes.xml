@@ -13,6 +13,7 @@
 		<item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
 		<!-- Customize your theme here. -->
 		<item name="dropDownListViewStyle">@style/DropDown.Divider</item>
+
 	</style>
 
 	<style name="SelectableItemTheme">
